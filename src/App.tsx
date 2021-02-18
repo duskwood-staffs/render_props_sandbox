@@ -46,10 +46,34 @@ class Mouse extends React.Component<
   }
 }
 
+const withMouse = <
+  P extends {
+    mouse: MousePos;
+  }
+>(
+  Component: React.FC<P>
+): React.ElementType => {
+  return class extends React.Component<P> {
+    render() {
+      return (
+        <>
+          <Mouse
+            render={(mouse) => (
+              <Component {...this.props} mouse={{ x: mouse.x, y: mouse.y }} />
+            )}
+          />
+        </>
+      );
+    }
+  };
+};
+
 export default function App() {
+  const WithMouseComponent = withMouse(Cat); // Cat, Dog, ...
+
   return (
     <>
-      <Mouse render={(mouse) => <Cat mouse={{ x: mouse.x, y: mouse.y }} />} />
+      <WithMouseComponent />
     </>
   );
 }
