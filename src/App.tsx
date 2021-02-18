@@ -19,7 +19,10 @@ const Cat = ({ mouse }: { mouse: MousePos }) => {
   );
 };
 
-class Mouse extends React.Component<{}, MousePos> {
+class Mouse extends React.Component<
+  { render: (x: MousePos) => React.ReactElement },
+  MousePos
+> {
   state = { x: 0, y: 0 };
 
   onMouseMove(e: React.MouseEvent) {
@@ -37,7 +40,7 @@ class Mouse extends React.Component<{}, MousePos> {
         }}
         onMouseMove={(e) => this.onMouseMove(e)}
       >
-        <Cat mouse={{ x: this.state.x, y: this.state.y }} />{" "}
+        {this.props.render(this.state)}
       </div>
     );
   }
@@ -46,7 +49,7 @@ class Mouse extends React.Component<{}, MousePos> {
 export default function App() {
   return (
     <>
-      <Mouse />
+      <Mouse render={(mouse) => <Cat mouse={{ x: mouse.x, y: mouse.y }} />} />
     </>
   );
 }
